@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+message Empty {
+}
+
+message Tx {
+    string error = 1;
+    int64 data = 2;
+}
+
+message Crypto {
+    string error = 1;
+    bytes data = 2;
+}
+
+message CryptoBolean {
+    string error = 1;
+    bool data = 2;
+}
+
+message CryptoString {
+    string error = 1;
+    string data = 2;
+}
+
+service Kms {
+    rpc NewNS(NewNSReq) returns (Tx) {}
+    rpc ResetNS(ResetNSReq) returns(Tx) {}
+    rpc NewKey(NewKeyReq) returns(Tx) {}
+    rpc ImportKey(ImportKeyReq) returns(Tx) {}
+    rpc ResetKey(ResetKeyReq) returns(Tx) {}
+    rpc NewSecret(NewSecretReq) returns(Tx) {}
+    rpc ResetSecret(ResetKeyReq) returns(Tx){}
+      
+    rpc ListNS(ListNSReq) returns(ListResult) {}
+    rpc ListKey(ListKeyReq) returns(ListResult) {}
+    rpc ListSecret(ListKeyReq) returns(ListResult) {}
+
+    rpc Encrypt(EncryptReq) returns(Crypto){}
+    rpc Decrypt(DecryptReq) returns(Crypto) {}
+    rpc Hmac(HmacReq) returns(Crypto) {}
+    rpc Sign(SignReq) returns (Crypto) {}
+    rpc Verify(VerifyReq) returns(CryptoBolean) {}
+    rpc GetSecret(GetSecretReq) returns(CryptoString) {}
+}
+
+message ListNSReq {
+    string sender = 1;
+}
+
+message ListKeyReq {
+    string sender = 1;
+    string ns = 2;
+}
+
+message ListItem {
+    string name = 1;
+    bool active = 2;
+    string type = 3;
+}
+
+message ListResult {
+    string error = 1;
+    repeated ListItem data = 2;
+}
+
+message NewNSReq {
+    string sender = 1;
+    string ns = 2; 
+    string token = 3;
+}
+
+message ResetNSReq {
+    string sender = 1;
+    string ns = 2;
+    string token = 3;
+  }
+
+ message NewKeyReq {
+    string sender = 1;
+    string ns = 2;
+    string key = 3;
+    string type = 4;
+    string token = 5;
+  }
+
+  message ImportKeyReq {
+    string sender = 1;
+    string ns = 2;
+    string key = 3;
+    string type = 4; 
+    string keyval = 5;
+    string token = 6; 
+  }
+
+  message ResetKeyReq {
+    string sender = 1;
+    string ns = 2;
+    string key = 3;
+    string token = 4;
+  }
+
+  message NewSecretReq {
+    string sender = 1;
+    string ns = 2;
+    string key = 3;
+    string secret = 4;
+    string token = 5;
+  }
+
+  message ResetSecretReq {
+    string sender = 1;
+    string ns = 2;
+    string key = 3;
+    string token = 4;
+  }
+
+  //Key API
+  message EncryptReq {
+    string sender = 1;
+    string ns = 2;
+    string key = 3;
+    bytes text = 4;
+  }
+
+  message DecryptReq {
+    string sender = 1;
+    string ns = 2;
+    string key = 3;
+    bytes cipher = 4;
+  }
+
+  message HmacReq {
+    string sender = 1;
+    string ns = 2;
+    string key = 3;
+    bytes text =4;
+  }
+
+  message SignReq {
+    string sender = 1;
+    string ns = 2;
+    string key =3;
+    bytes hash = 4;
+  }
+
+  message VerifyReq {
+    string sender = 1;
+    string ns = 2;
+    string key = 3;
+    bytes hash = 4;
+    bytes signature = 5;
+  }
+
+ message GetSecretReq {
+    string sender = 1;
+    string ns = 2;
+    string key = 3;
+  }
